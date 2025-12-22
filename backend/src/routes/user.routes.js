@@ -38,10 +38,10 @@ router.route("/change_password").post(verifyJWT, changeCurrentPassword);
 router.route("/current_user").get(verifyJWT, getCurrentUser);
 router.route("/update_user").post(verifyJWT, updateUserDetails);
 router
-  .route("/update-avatar")
-  .post(upload.single("avatar"), verifyJWT, updateAvatarImage);
+  .route("/update_avatar")
+  .post(verifyJWT, upload.single("avatar"), updateAvatarImage);
 router
-  .route("/update-coverImage")
-  .post(upload.single("coverImage"), verifyJWT, updateCoverImage);
+  .route("/update_coverImage")
+  .post(verifyJWT, upload.single("coverImage"), updateCoverImage);
 
 export default router;
