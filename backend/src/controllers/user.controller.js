@@ -224,9 +224,13 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const user = await User.findById(req.user?._id);
 
-  const isPasswordCorrect = user.isPasswordCorrect(oldPassword);
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
   if (!isPasswordCorrect) {
     throw new ApiError(400, "Invalid Old Password");
+  }
+
+  if (oldPassword === newPassword) {
+    throw new ApiError(400, "New password must be different from old password");
   }
 
   user.password = newPassword;
@@ -246,17 +250,43 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 const updateUserDetails = asyncHandler(async (req, res) => {
   const { username, fullName } = req.body;
 
+  // At least one field must be provided
   if (!username && !fullName) {
-    throw new ApiError(400, "");
+    throw new ApiError(400, "At least one field is required to update");
   }
 
-  const user = User.findByIdAndUpdate(
+  // Build update object with only provided fields
+  const updateFields = {};
+
+  if (fullName?.trim()) {
+    updateFields.fullName = fullName.trim();
+  }
+
+  if (username?.trim()) {
+    const trimmedUsername = username.trim().toLowerCase();
+
+    // Check if username is being changed and if it's already taken
+    if (trimmedUsername !== req.user.username) {
+      const existingUser = await User.findOne({ username: trimmedUsername });
+      if (existingUser) {
+        throw new ApiError(409, "Username is already taken");
+      }
+      updateFields.username = trimmedUsername;
+    }
+  }
+
+  // If no valid fields to update
+  if (Object.keys(updateFields).length === 0) {
+    throw new ApiError(400, "No changes detected or invalid data provided");
+  }
+
+  const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
-      $set: { fullName, email },
+      $set: updateFields,
     },
     { new: true }
-  ).select("-password");
+  ).select("-password -refreshToken");
 
   return res
     .status(200)
