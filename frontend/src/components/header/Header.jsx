@@ -2,16 +2,20 @@ import searchIcon from "../../assets/icons/search_icon.svg";
 import logoIcon from "../../assets/icons/logo_icon.svg";
 import menuIcon from "../../assets/icons/hamburger_icon.svg";
 import plusIcon from "../../assets/icons/plus_icon.svg";
+import { useDispatch } from "react-redux";
+import { toggleSidebar } from "../../store/slices/sidebarSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   return (
-    <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 bg-[#111212] text-white border-b border-neutral-800">
-      <div className="flex items-center gap-6 shrink-0">
+    <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 text-white border-b border-neutral-800">
+      <div className="flex items-center gap-5">
         <button
           type="button"
           aria-label="Open menu"
+          onClick={() => dispatch(toggleSidebar())}
         >
-          <img src={menuIcon} aria-label="Menu" className="w-10 h-10" />
+          <img src={menuIcon} aria-label="Menu" className="w-10 h-10 cursor-pointer" />
         </button>
         <div className="flex items-center gap-1">
           <img src={logoIcon} aria-label="logo" className="h-10 w-8" />
@@ -45,7 +49,7 @@ const Header = () => {
         <button
           type="button"
           aria-label="Profile"
-          className="h-10 w-10 rounded-full bg-gradient-to-br from-neutral-700 to-neutral-500"
+          className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
         />
       </div>
     </header>
