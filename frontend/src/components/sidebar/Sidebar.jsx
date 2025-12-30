@@ -29,8 +29,8 @@ const Sidebar = () => {
   return (
     <>
       <div
-        className={`h-[calc(100vh-4rem)] py-7 -my-0.5 flex flex-col gap-5 text-white justify-between ${
-          isSidebarOpen ? "w-55 px-5" : "w-20 px-4"
+        className={`h-full py-7 flex flex-col gap-5 text-white justify-between shrink-0 ${
+          isSidebarOpen ? "w-55 px-6" : "w-20 px-5"
         }`}
       >
         {/* top navigation */}

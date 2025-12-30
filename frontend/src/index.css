@@ -3,3 +3,7 @@
 body {
   background-color: #111212;
 }
+
+:root {
+  --theme-color: #780000;
+}

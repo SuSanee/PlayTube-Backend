@@ -1,11 +1,10 @@
-import Header from "./components/header/Header";
-import Sidebar from "./components/sidebar/Sidebar";
+import { RouterProvider } from "react-router";
+import router from "./routes";
 
 function App() {
   return (
     <>
-      <Header />
-      <Sidebar/>
+      <RouterProvider router={router}/>
     </>
   );
 }

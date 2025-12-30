@@ -8,7 +8,7 @@ import { toggleSidebar } from "../../store/slices/sidebarSlice";
 const Header = () => {
   const dispatch = useDispatch();
   return (
-    <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 text-white border-b border-neutral-800">
+    <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 text-white border-b border-neutral-800 shrink-0">
       <div className="flex items-center gap-5">
         <button
           type="button"
