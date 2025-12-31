@@ -1,61 +1,41 @@
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login, clearError } from "../../store/slices/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  //   const [error, setError] = useState("");
-  //   const [loading, setLoading] = useState(false);
-  //   const navigate = useNavigate();
-  const loading = false;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
 
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     setError("");
-  //     setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(clearError());
 
-  //     try {
-  //       // TODO: Replace with your actual API call
-  //       const response = await fetch("/api/auth/login", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify({ email, password }),
-  //       });
-
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         // Store user data and token
-  //         localStorage.setItem("token", data.token);
-  //         localStorage.setItem("user", JSON.stringify(data.user));
-  //         navigate("/");
-  //       } else {
-  //         setError("Invalid email or password");
-  //       }
-  //     } catch (error) {
-  //       setError("Something went wrong. Please try again.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+    try {
+      await dispatch(login({ email, password })).unwrap();
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div
-      className="flex justify-center items-center min-h-screen bg-(--theme-color)"
-    >
+    <div className="flex justify-center items-center min-h-screen bg-(--theme-color)">
       <div className="bg-white p-8 rounded-lg w-full max-w-md shadow-2xl">
-        <h2
-          className="text-3xl font-bold mb-6 text-center tracking-tight text-(--theme-color)"
-        >
+        <h2 className="text-3xl font-bold mb-6 text-center tracking-tight text-(--theme-color)">
           Sign In to PlayTube
         </h2>
 
-        {/* {error && (
+        {error && (
           <div className="bg-red-500 text-white p-3 rounded mb-4 text-sm">
             {error}
           </div>
-        )} */}
+        )}
 
-        <form onSubmit={() => {}} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <input
               id="email"
