@@ -63,7 +63,7 @@ const Header = () => {
             type="button"
             className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
           >
-            <img src={user.avatar} aria-label="Profile" />
+            <img src={user.avatar} aria-label="Profile" className="rounded-full"/>
           </button>
         ) : (
           <button
