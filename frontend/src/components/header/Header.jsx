@@ -2,11 +2,19 @@ import searchIcon from "../../assets/icons/search_icon.svg";
 import logoIcon from "../../assets/icons/logo_icon.svg";
 import menuIcon from "../../assets/icons/hamburger_icon.svg";
 import plusIcon from "../../assets/icons/plus_icon.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleSidebar } from "../../store/slices/sidebarSlice";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    navigate("/login");
+  };
+
   return (
     <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 text-white border-b border-neutral-800 shrink-0">
       <div className="flex items-center gap-5">
@@ -50,11 +58,22 @@ const Header = () => {
             <span>Create</span>
           </div>
         </button>
-        <button
-          type="button"
-          aria-label="Profile"
-          className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
-        />
+        {isAuthenticated ? (
+          <button
+            type="button"
+            className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
+          >
+            <img src={user.avatar} aria-label="Profile" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="rounded-2xl border border-white py-1 px-3 cursor-pointer hover:bg-[#2a2a2a]"
+            onClick={handleSignIn}
+          >
+            Sign In
+          </button>
+        )}
       </div>
     </header>
   );

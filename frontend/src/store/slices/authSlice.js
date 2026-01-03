@@ -6,7 +6,7 @@ export const login = createAsyncThunk(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await apiRequest("/users/login", {
+      const response = await apiRequest("/auth/login", {
         method: "POST",
         body: JSON.stringify(credentials),
       });
@@ -22,7 +22,7 @@ export const fetchUser = createAsyncThunk(
   "auth/fetchUser",
   async (__, { rejectWithValue }) => {
     try {
-      const response = await apiRequest("/users/current-user");
+      const response = await apiRequest("/auth/current-user");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message || "Not Aunthenticated");
@@ -35,7 +35,7 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      await apiRequest("/users/logout", { method: "POST" });
+      await apiRequest("/auth/logout", { method: "POST" });
     } catch (error) {
       return rejectWithValue(error.message || "Logout failed");
     }
