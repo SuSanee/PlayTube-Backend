@@ -15,7 +15,11 @@ const Header = () => {
           aria-label="Open menu"
           onClick={() => dispatch(toggleSidebar())}
         >
-          <img src={menuIcon} aria-label="Menu" className="w-10 h-10 cursor-pointer" />
+          <img
+            src={menuIcon}
+            aria-label="Menu"
+            className="w-10 h-10 cursor-pointer"
+          />
         </button>
         <div className="flex items-center gap-1">
           <img src={logoIcon} aria-label="logo" className="h-10 w-8" />
@@ -23,7 +27,7 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="flex flex-1 max-w-3xl items-center gap-2">
+      <div className="flex flex-1 max-w-125 items-center gap-2">
         <div className="flex flex-1 items-center gap-3 rounded-full bg-neutral-900 border border-neutral-800 px-4 py-2">
           <input
             type="text"

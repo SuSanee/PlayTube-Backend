@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login, clearError } from "../../store/slices/authSlice";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,12 +66,12 @@ const Login = () => {
               <input type="checkbox" className="mr-2 cursor-pointer" />
               Remember me
             </label>
-            <a
-              href="#"
+            <Link
+              to="#"
               className="hover:underline transition text-(--theme-color)"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -84,12 +85,12 @@ const Login = () => {
 
         <div className="mt-6 text-center text-gray-600 text-sm">
           Don't have an account?{" "}
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
             className="font-semibold hover:underline transition text-(--theme-color)"
           >
             Sign Up
-          </a>
+          </Link>
         </div>
 
         <div className="mt-6">
@@ -98,9 +99,7 @@ const Login = () => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">
-                Or continue with
-              </span>
+              <span className="px-2 bg-white text-gray-500">Or</span>
             </div>
           </div>
 

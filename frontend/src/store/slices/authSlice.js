@@ -1,69 +1,51 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { API_BASE_URL } from "../../constants";
+import { apiRequest } from "../../utility/apiRequest";
 
 // Async thunk for login
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await apiRequest("/users/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(credentials),
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || "Login failed");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message || "Network error");
+      return response.data.user;
+    } catch (err) {
+      return rejectWithValue(err.message);
     }
   }
 );
 
-// Async thunk for signup
-export const signup = createAsyncThunk(
-  "auth/signup",
-  async ({ email, password, username }, { rejectWithValue }) => {
+// Async thunk for fetching current user
+export const fetchUser = createAsyncThunk(
+  "auth/fetchUser",
+  async (__, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, username }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        return rejectWithValue(error.message || "Signup failed");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      return data;
+      const response = await apiRequest("/users/current-user");
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.message || "Network error");
+      return rejectWithValue(error.message || "Not Aunthenticated");
     }
   }
 );
 
 // Async thunk for logout
-export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
-});
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      await apiRequest("/users/logout", { method: "POST" });
+    } catch (error) {
+      return rejectWithValue(error.message || "Logout failed");
+    }
+  }
+);
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null,
-  token: localStorage.getItem("token") || null,
-  isAuthenticated: !!localStorage.getItem("token"),
+  user: null,
   loading: false,
+  isAuthenticated: false,
   error: null,
 };
 
@@ -73,11 +55,6 @@ const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
-    },
-    setCredentials: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
     },
   },
   extraReducers: (builder) => {
@@ -89,40 +66,36 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = action.payload;
         state.isAuthenticated = true;
-        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      // Signup
-      .addCase(signup.pending, (state) => {
+      // current user
+      .addCase(fetchUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(signup.fulfilled, (state, action) => {
+      .addCase(fetchUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = action.payload;
         state.isAuthenticated = true;
-        state.error = null;
       })
-      .addCase(signup.rejected, (state, action) => {
+      .addCase(fetchUser.rejected, (state) => {
         state.loading = false;
-        state.error = action.payload;
+        state.user = null;
+        state.isAuthenticated = false;
       })
       // Logout
       .addCase(logout.fulfilled, (state) => {
+        state.loading = false;
         state.user = null;
-        state.token = null;
         state.isAuthenticated = false;
-        state.error = null;
       });
   },
 });
 
-export const { clearError, setCredentials } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
