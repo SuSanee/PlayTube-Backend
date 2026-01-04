@@ -6,4 +6,7 @@ body {
 
 :root {
   --theme-color: #780000;
+  --grey-color: #9e9e9e;
+  --white-color: #ffffff;
+  --dark-grey-color: #3f3f3f;
 }

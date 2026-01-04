@@ -193,11 +193,10 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         subscribedToCount: 1,
         email: 1,
         createdAt: 1,
+        isSubscribed: 1,
       },
     },
   ]);
-
-  console.log(channel);
 
   if (!channel?.length) {
     throw new ApiError(404, "Channel does not exist");

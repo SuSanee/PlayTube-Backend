@@ -20,7 +20,7 @@ router
 router
   .route("/update_coverImage")
   .patch(verifyJWT, upload.single("coverImage"), updateCoverImage);
-router.route("/channel/:username").get(verifyJWT, getUserChannelProfile);
+router.route("/:username").get(verifyJWT, getUserChannelProfile);
 router.route("/watch_history").get(verifyJWT, getUserWatchHistory);
 
 export default router;

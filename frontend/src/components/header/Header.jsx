@@ -15,6 +15,10 @@ const Header = () => {
     navigate("/login");
   };
 
+  const handleUserProfile = () => {
+    navigate(`/${user?.username}`)
+  }
+
   return (
     <header className="h-16 flex items-center justify-between gap-4 px-5 py-3 text-white border-b border-neutral-800 shrink-0">
       <div className="flex items-center gap-5">
@@ -62,6 +66,7 @@ const Header = () => {
           <button
             type="button"
             className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
+            onClick={handleUserProfile}
           >
             <img src={user.avatar} aria-label="Profile" className="rounded-full"/>
           </button>

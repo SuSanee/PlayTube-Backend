@@ -1,33 +1,72 @@
-import coverImage from "../../assets/images/temp_cover_image.jpg";
-import profileImage from "../../assets/images/jerryyy.jpg";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { apiRequest } from "../../utility/apiRequest";
 
-const ChannelProfile = () => {
+const UserProfile = () => {
+  const { username } = useParams();
+  const { user } = useSelector((state) => state.auth);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await apiRequest(`/users/${username}`);
+        setProfile(response.data);
+      } catch {
+        console.error("Failed to fetch Profile");
+      }
+    };
+
+    if (username) {
+      fetchProfile();
+    }
+  }, [username]);
+
+  const isOwnProfile = user?.username === profile?.username;
+
   return (
     <>
-      <div className="flex flex-col text-white w-full">
-        <div className="flex flex-col">
-          <img src={coverImage} className="h-50" />
-          <div className="flex justify-between px-6 items-center">
-            <div className="flex gap-4">
-              <img
-                src={profileImage}
-                className="w-30 h-30 rounded-full -my-4 px-0"
-              />
-              <div className="flex flex-col py-6">
-                <span className="text-xl font-medium">Yash Mittal</span>
-                <span>@YashMittal</span>
-                <div className="flex gap-5">
-                  <span>600k Subscribers</span>
-                  <span>220 Subscribed</span>
+      {!profile ? (
+        <h1 className="text-white">Loading....</h1>
+      ) : (
+        <div className="flex flex-col text-white w-full px-7 py-3">
+          <div className="flex flex-col gap-4">
+            {profile.coverImage && (
+              <img src={profile.coverImage} className={`h-50 rounded-lg object-cover`} />
+            )}
+            <div className="flex gap-5 items-center">
+              <img src={profile.avatar} className="w-40 h-40 rounded-full" />
+              <div className="flex flex-col gap-2">
+                <span className="text-3xl font-medium">{profile.fullName}</span>
+                <div className="flex gap-1 items-center text-(--grey-color) text-sm">
+                  <span className="text-base text-(--white-color) font-medium">
+                    {profile.username}
+                  </span>
+                  {"•"}
+                  <span>{profile.subscribersCount} Subscribers</span>
+                  {"•"}
+                  <span>{profile.subscribedToCount} Subscribed</span>
                 </div>
+                {isOwnProfile ? (
+                  <button className="w-50 bg-(--dark-grey-color) py-2 rounded-4xl">
+                    Customise Channel
+                  </button>
+                ) : (
+                  <button
+                    className={`w-30 ${
+                      profile.isSubscribed
+                        ? "bg-(--dark-grey-color)"
+                        : "bg-(--theme-color)"
+                    } py-2 rounded-4xl`}
+                  >
+                    {profile.isSubscribed ? "Subscribed" : "Subscribe"}
+                  </button>
+                )}
               </div>
             </div>
-            <button className="bg-(--theme-color) py-2 px-5 rounded-4xl">
-              Subscribe
-            </button>
           </div>
-        </div>
-        {/* <div className="px-7 py-6 flex gap-7 flex-wrap">
+          {/* <div className="px-7 py-6 flex gap-7 flex-wrap">
           <div className="flex flex-col pb-3 gap-2">
             <img src={coverImage} className="w-72 h-50 rounded-lg" />
             <div className="flex flex-col gap-0.5">
@@ -85,9 +124,10 @@ const ChannelProfile = () => {
             </div>
           </div>
         </div> */}
-      </div>
+        </div>
+      )}
     </>
   );
 };
 
-export default ChannelProfile;
+export default UserProfile;

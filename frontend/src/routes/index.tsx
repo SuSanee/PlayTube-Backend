@@ -4,6 +4,7 @@ import ChannelProfile from "../features/channel-profile/channel-profile";
 import Home from "../features/home/home";
 import Login from "../features/login/Login";
 import Signup from "../signup/Signup";
+import UserProfile from "../features/user-profile/user-profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         path: "channel-user",
         element: <ChannelProfile />,
       },
+      {
+        path: ":username",
+        element: <UserProfile />,
+      },
     ],
   },
   {
@@ -26,8 +31,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <Signup/>
-  }
+    element: <Signup />,
+  },
 ]);
 
 export default router;
