@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login, clearError } from "../../store/slices/authSlice";
+import { login, clearError, googleLogin } from "../../store/slices/authSlice";
 import { Link } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,6 +21,15 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const loginWithGoogle = async (credentialResponse) => {
+    try {
+      await dispatch(googleLogin(credentialResponse.credential)).unwrap();
+      navigate("/");
+    } catch (error) {
+      console.error("Google login failed:", error);
     }
   };
 
@@ -104,9 +114,16 @@ const Login = () => {
           </div>
 
           <div className="mt-4">
-            <button className="w-full flex items-center justify-center px-4 py-3 bg-white text-gray-700 rounded-full hover:bg-gray-50 border border-gray-300 transition">
-              Google
-            </button>
+            <GoogleLogin
+              onSuccess={loginWithGoogle}
+              onError={() => {
+                console.error("Google Login Failed");
+              }}
+              width="100%"
+              size="large"
+              text="signin_with"
+              shape="pill"
+            />
           </div>
         </div>
       </div>

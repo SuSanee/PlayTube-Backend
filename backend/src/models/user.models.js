@@ -4,6 +4,10 @@ import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
   {
+    isGoogleAuth: {
+      type: Boolean,
+      default: false,
+    },
     username: {
       type: String,
       required: true,
