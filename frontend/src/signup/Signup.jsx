@@ -57,7 +57,7 @@ const Signup = () => {
           Create Your Account
         </h2>
 
-        {(error) && (
+        {error && (
           <div className="bg-red-500 text-white p-2 rounded mb-3 text-sm">
             {error}
           </div>
@@ -86,34 +86,23 @@ const Signup = () => {
             />
           </div>
 
-          {/* Email */}
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2.5 rounded-full bg-white text-black border border-gray-300 focus:border-gray-400 focus:outline-none placeholder:text-gray-400 text-sm"
-          />
-
-          {/* Password Row */}
+          {/* Email & Password Row */}
           <div className="grid grid-cols-2 gap-3">
+            <input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2.5 rounded-full bg-white text-black border border-gray-300 focus:border-gray-400 focus:outline-none placeholder:text-gray-400 text-sm"
+            />
             <input
               id="password"
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 rounded-full bg-white text-black border border-gray-300 focus:border-gray-400 focus:outline-none placeholder:text-gray-400 text-sm"
-            />
-            <input
-              id="confirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
               required
               className="w-full px-4 py-2.5 rounded-full bg-white text-black border border-gray-300 focus:border-gray-400 focus:outline-none placeholder:text-gray-400 text-sm"
             />
