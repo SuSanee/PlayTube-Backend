@@ -68,7 +68,7 @@ const Header = () => {
             className="h-10 w-10 rounded-full bg-linear-to-br from-neutral-700 to-neutral-500"
             onClick={handleUserProfile}
           >
-            <img src={user.avatar} aria-label="Profile" className="rounded-full"/>
+            <img src={user.avatar} aria-label="Profile" className="rounded-full cursor-pointer"/>
           </button>
         ) : (
           <button
